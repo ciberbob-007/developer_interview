@@ -8,7 +8,8 @@ import {
   Container,
   Stack,
   Toolbar,
-  AppBar
+  AppBar,
+  Button
 } from '@mui/material'
 import { useEffect, useState } from 'react'
 
@@ -39,11 +40,16 @@ import useSwr from 'swr'
 const fetcher = (url: string) => fetch(url).then(res => res.json())
 
 const Home: NextPage = props => {
-  const { data: price, error: priceError } = useSwr('/api/price', fetcher)
-  const { data: balance, error: balanceError } = useSwr('/api/balance', fetcher)
-
   const [bech32Address, setBech32Address] = useState('')
   const [hex16Address, setHex16Address] = useState('')
+
+  const { data: price, error: priceError } = useSwr('/api/price', fetcher)
+  const { data: balance, error: balanceError } = useSwr(
+    `/api/balance?address32=${bech32Address}&address16=${hex16Address}`,
+    fetcher
+  )
+
+  useEffect(() => {}, [hex16Address])
 
   return (
     <Box>
@@ -56,14 +62,12 @@ const Home: NextPage = props => {
             </Typography>
             {price && (
               <Typography variant="h6" component="div">
-                {' '}
-                {`XCAD : ${price.price}`}{' '}
+                {`XCAD : $${price.price} USD`}
               </Typography>
             )}
             {priceError && (
               <Typography variant="h6" component="div">
-                {' '}
-                {`0.00`}{' '}
+                {`$0.00`}
               </Typography>
             )}
           </Toolbar>
@@ -99,6 +103,14 @@ const Home: NextPage = props => {
             </Grid>
             <Grid item xs={6}>
               <Input fullWidth placeholder="Hex Address" value={hex16Address} />
+            </Grid>
+            <Grid item xs={6}>
+              <Button variant="contained">Query Balance</Button>
+            </Grid>
+            <Grid item xs={6}>
+              <Typography variant="h6" component="div">
+                {`Balance: ${balance ? balance.balance : '-'}`}
+              </Typography>
             </Grid>
           </Grid>
         </Stack>
