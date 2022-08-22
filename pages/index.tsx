@@ -1,9 +1,10 @@
 import type { NextPage } from 'next'
 import Head from 'next/head' 
 import { Typography, Grid, Input, Box, Container, Stack, Toolbar, AppBar } from '@mui/material';
+import {useState} from "react";
 
-// import { fromBech32Address, toBech32Address } from '@zilliqa-js/crypto';
-// import { isBech32, isAddress } from '@zilliqa-js/util/dist/validation';
+import { fromBech32Address, toBech32Address } from '@zilliqa-js/crypto';
+import { isBech32, isAddress } from '@zilliqa-js/util/dist/validation';
 
 /**
  * TODO [Part 1]:
@@ -25,6 +26,10 @@ import { Typography, Grid, Input, Box, Container, Stack, Toolbar, AppBar } from 
  */
 
 const Home: NextPage = (props) => {
+
+  const [bech32Address, setBech32Address] = useState('');
+  const [hex16Address, setHex16Address] = useState('');
+
   return (
     <Box >
       <AppBar position='fixed'>
@@ -46,10 +51,21 @@ const Home: NextPage = (props) => {
         <Stack mt={16} alignItems="center"> 
           <Grid container maxWidth={600} spacing={3}>
             <Grid item xs={6}  >
-              <Input fullWidth placeholder='Bech32 Address' />
+              <Input fullWidth placeholder='Bech32 Address' value={bech32Address}  onChange={event => {
+                const bench32 = event.target.value
+                setBech32Address(bench32)
+                if(isBech32(bench32)){
+                  const hex16 = fromBech32Address(event.target.value)
+                  setHex16Address(hex16)
+                  return
+                }
+
+                setHex16Address('')
+
+              }}  />
             </Grid>
             <Grid item xs={6}  >
-              <Input fullWidth placeholder='Hex Address' />
+              <Input fullWidth placeholder='Hex Address' value={hex16Address} />
             </Grid>
           </Grid>
         </Stack>
