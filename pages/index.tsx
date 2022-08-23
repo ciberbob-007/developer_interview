@@ -102,10 +102,25 @@ const Home: NextPage = props => {
               />
             </Grid>
             <Grid item xs={6}>
-              <Input fullWidth placeholder="Hex Address" value={hex16Address} />
+              <Input
+                fullWidth
+                placeholder="Hex Address"
+                value={hex16Address}
+                onChange={event => {
+                  const hex16 = event.target.value
+                  setHex16Address(hex16)
+                  if (isAddress(hex16)) {
+                    const bench32 = toBech32Address(event.target.value)
+                    setBech32Address(bench32)
+                    return
+                  }
+                  setBech32Address('')
+                }}
+              />
             </Grid>
             <Grid item xs={6}>
-              <Button variant="contained">Query Balance</Button>
+              {/* Disable button, no longer needed
+                <Button variant="contained">Query Balance</Button>*/}
             </Grid>
             <Grid item xs={6}>
               <Typography variant="h6" component="div">

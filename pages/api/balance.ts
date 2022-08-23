@@ -13,11 +13,11 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 import { Zilliqa } from '@zilliqa-js/zilliqa'
 import { ContractState } from '../../typings'
 
-import { isBech32, isAddress } from '@zilliqa-js/util/dist/validation'
+import { isBech32 } from '@zilliqa-js/util/dist/validation'
 
 const zilliqa = new Zilliqa('https://api.zilliqa.com/')
 
-const tokenAddress = 'zil1z5l74hwy3pc3pr3gdh3nqju4jlyp0dzkhq2f5y'
+// const tokenAddress = 'zil1z5l74hwy3pc3pr3gdh3nqju4jlyp0dzkhq2f5y'
 
 type RequestData = {}
 
